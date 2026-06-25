@@ -93,7 +93,7 @@
       gap: 10px;
     }
     .logo-img {
-      height: 140px;
+      height: 64px;
       width: auto;
       display: block;
     }
@@ -575,7 +575,8 @@
   };
 
   const TARIFA = 0.85;
-  const CUSTO_KWP = 4800;
+  const CUSTO_KWP = 5000;     // R$/kWp — média nacional 2026 (fonte: CustoSolar/Greener)
+  const EFICIENCIA = 0.78;    // fator de perdas: temperatura, sujeira, cabos, inversor (ABSOLAR)
 
   function fmt(n) { return n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
   function fmtInt(n) { return Math.round(n).toLocaleString('pt-BR'); }
@@ -591,11 +592,10 @@
     const econMensal    = conta * (red / 100);
     const novaContaMes  = conta - econMensal;
     const econAnual     = econMensal * 12;
-    const kwh           = conta / TARIFA;
-    const kwhGerado     = kwh * (red / 100);
-    const kwp           = kwhGerado / (reg.hsp * 30);
-    const custoSistema  = kwp * CUSTO_KWP;
-    const payback       = custoSistema / econAnual;
+    const kwhTotal      = conta / TARIFA;                              // consumo total em kWh/mês
+    const kwp           = kwhTotal / (reg.hsp * 30 * EFICIENCIA);     // kWp com fator de perdas 78% (ABSOLAR)
+    const custoSistema  = kwp * CUSTO_KWP;                            // custo fixo pelo consumo real
+    const payback       = custoSistema / econAnual;                   // varia conforme % de redução
     const econ10anos    = econAnual * 10;
 
     // Métricas
@@ -678,10 +678,12 @@
 
     // Nota rodapé
     document.getElementById('nota-rodape').textContent =
-      `Simulação baseada na irradiação solar de ${reg.hsp} h/dia para ${reg.label} (CRESESB/INMET), ` +
-      `tarifa de referência R$ ${TARIFA}/kWh (ANEEL — distribuidora Norte Fluminense) e custo médio de instalação ` +
-      `de R$ ${fmtInt(CUSTO_KWP)}/kWp. Valores estimados. Uma proposta técnica formal considera consumo real, ` +
-      `estrutura do imóvel e condições de financiamento.`;
+      `Simulação baseada na irradiação solar de ${reg.hsp} h/dia para ${reg.label} (CRESESB/INMET — Atlas Solar Brasileiro), ` +
+      `tarifa de referência R$ ${TARIFA}/kWh (ANEEL — distribuidora Norte Fluminense), fator de eficiência de 78% ` +
+      `(perdas por temperatura, sujeira e inversor — padrão ABSOLAR) e custo médio de R$ ${fmtInt(CUSTO_KWP)}/kWp ` +
+      `instalado (Greener/CustoSolar, 2026). Payback calculado sem considerar Fio B (Lei 14.300/2022) — ` +
+      `novos sistemas em regime GD III têm payback real de 4–6 anos. Valores estimados; uma proposta técnica formal ` +
+      `considera consumo real, estrutura do imóvel e condições de financiamento.`;
   }
 
   document.getElementById('conta').addEventListener('input', calc);
