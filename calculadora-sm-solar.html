@@ -646,7 +646,7 @@
   };
 
   const TARIFA = 0.85;
-  const CUSTO_KWP = 5000;     // R$/kWp — média nacional 2026 (fonte: CustoSolar/Greener)
+  const CUSTO_KWP = 791.67;  // R$/kWp — baseado em R$475/painel de 600W (SM Solar, 2026)
   const EFICIENCIA = 0.78;    // fator de perdas: temperatura, sujeira, cabos, inversor (ABSOLAR)
 
   function fmt(n) { return n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
@@ -751,8 +751,8 @@
     document.getElementById('nota-rodape').textContent =
       `Simulação baseada na irradiação solar de ${reg.hsp} h/dia para ${reg.label} (CRESESB/INMET — Atlas Solar Brasileiro), ` +
       `tarifa de referência R$ ${TARIFA}/kWh (ANEEL — distribuidora Norte Fluminense), fator de eficiência de 78% ` +
-      `(perdas por temperatura, sujeira e inversor — padrão ABSOLAR) e custo médio de R$ ${fmtInt(CUSTO_KWP)}/kWp ` +
-      `instalado (Greener/CustoSolar, 2026). Payback calculado sem considerar Fio B (Lei 14.300/2022) — ` +
+      `(perdas por temperatura, sujeira e inversor — padrão ABSOLAR) e custo de R$ 475/painel de 600W instalado ` +
+      `(preço SM Solar 2026, tudo incluído). Payback calculado sem considerar Fio B (Lei 14.300/2022) — ` +
       `novos sistemas em regime GD III têm payback real de 4–6 anos. Valores estimados; uma proposta técnica formal ` +
       `considera consumo real, estrutura do imóvel e condições de financiamento.`;
   }
