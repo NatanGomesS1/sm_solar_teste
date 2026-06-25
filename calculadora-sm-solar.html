@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora de Economia Solar — SM Energia Solar e Soluções</title>
+  <meta name="description" content="Descubra quanto você pode economizar na conta de luz com energia solar. Simulação gratuita da SM Energia Solar e Soluções." />
+
+  <!-- Fontes: 2 famílias, pesos auditados (Inter: 400,500,600 | Montserrat: 700,800), display=swap ativo -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@700;800&display=swap" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@700;800&display=swap" rel="stylesheet" /></noscript>
+  <!--
+    SELF-HOSTED (opcional — melhor para LGPD e PageSpeed):
+    1. Acesse https://gwfh.mranftl.com/fonts
+    2. Baixe Inter (400,500,600) e Syne (700,800) em woff2
+    3. Coloque os arquivos na pasta /fonts/ do repositório
+    4. Substitua os links acima por @font-face no <style>:
+
+    @font-face {
+      font-family: 'Inter';
+      src: url('/fonts/inter-400.woff2') format('woff2');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter';
+      src: url('/fonts/inter-500.woff2') format('woff2');
+      font-weight: 500; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Inter';
+      src: url('/fonts/inter-600.woff2') format('woff2');
+      font-weight: 600; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Montserrat';
+      src: url('/fonts/syne-700.woff2') format('woff2');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Montserrat';
+      src: url('/fonts/syne-800.woff2') format('woff2');
+      font-weight: 800; font-style: normal; font-display: swap;
+    }
+  -->
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --sol: #F5A623;
+      --sol-light: #FEF3DC;
+      --sol-dark: #C27D0E;
+      --azul: #1B3A6B;
+      --azul-dark: #122850;
+      --verde: #1A6B45;
+      --verde-light: #E3F2EC;
+      --verde-mid: #2D9260;
+      --cinza-bg: #F7F8F6;
+      --cinza-borda: #E2E5E0;
+      --cinza-texto: #6B7280;
+      --preto: #111814;
+      --branco: #FFFFFF;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--cinza-bg);
+      color: var(--preto);
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+    header {
+      background: var(--azul);
+      padding: 0 1.5rem;
+    }
+    .header-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 0;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo-img {
+      height: 64px;
+      width: auto;
+      display: block;
+    }
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.15;
+    }
+    .logo-text strong {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 16px;
+      color: var(--sol);
+      letter-spacing: -0.5px;
+    }
+    .logo-text span {
+      font-size: 11px;
+      color: rgba(255,255,255,0.65);
+      letter-spacing: 0.3px;
+    }
+    .header-badge {
+      font-size: 12px;
+      background: rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.8);
+      padding: 5px 12px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    /* HERO */
+    .hero {
+      background: var(--azul);
+      padding: 2.5rem 1.5rem 3.5rem;
+      text-align: center;
+    }
+    .hero-eyebrow {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--sol);
+      margin-bottom: 1rem;
+    }
+    .hero h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: clamp(28px, 5vw, 42px);
+      color: var(--branco);
+      line-height: 1.2;
+      max-width: 600px;
+      margin: 0 auto 1rem;
+      letter-spacing: -1px;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--sol);
+    }
+    .hero p {
+      font-size: 15px;
+      color: rgba(255,255,255,0.7);
+      max-width: 480px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* CARD PRINCIPAL */
+    .card-wrap {
+      max-width: 860px;
+      margin: -2rem auto 0;
+      padding: 0 1.5rem 4rem;
+    }
+    .card {
+      background: var(--branco);
+      border-radius: var(--radius);
+      border: 1px solid var(--cinza-borda);
+      overflow: hidden;
+    }
+    .card-body {
+      padding: 2rem;
+    }
+
+    /* FORM */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem 1.5rem;
+      margin-bottom: 1.75rem;
+    }
+    @media (max-width: 560px) {
+      .form-grid { grid-template-columns: 1fr; }
+    }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group.full { grid-column: 1 / -1; }
+    label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      color: var(--cinza-texto);
+    }
+    .input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .input-prefix {
+      position: absolute;
+      left: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--cinza-texto);
+      pointer-events: none;
+    }
+    input[type="number"], select {
+      width: 100%;
+      padding: 10px 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      border: 1.5px solid var(--cinza-borda);
+      border-radius: var(--radius-sm);
+      background: var(--cinza-bg);
+      color: var(--preto);
+      outline: none;
+      transition: border-color 0.15s;
+      -moz-appearance: textfield;
+    }
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+    input[type="number"]:focus, select:focus { border-color: var(--verde-mid); background: var(--branco); }
+    .has-prefix input[type="number"] { padding-left: 30px; }
+
+    /* SLIDER */
+    .slider-wrap { display: flex; align-items: center; gap: 12px; }
+    input[type="range"] {
+      flex: 1;
+      -webkit-appearance: none;
+      height: 5px;
+      border-radius: 3px;
+      background: var(--cinza-borda);
+      outline: none;
+      cursor: pointer;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--verde-mid);
+      border: 3px solid var(--branco);
+      box-shadow: 0 0 0 1.5px var(--verde-mid);
+      cursor: pointer;
+    }
+    input[type="range"]::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--verde-mid);
+      border: 3px solid var(--branco);
+      box-shadow: 0 0 0 1.5px var(--verde-mid);
+      cursor: pointer;
+    }
+    .slider-val {
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      color: var(--verde);
+      min-width: 40px;
+      text-align: right;
+    }
+
+    /* DIVISOR */
+    .divider {
+      height: 1px;
+      background: var(--cinza-borda);
+      margin: 1.75rem 0;
+    }
+
+    /* MÉTRICAS */
+    .metrics-title {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--cinza-texto);
+      margin-bottom: 1rem;
+    }
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      margin-bottom: 1.5rem;
+    }
+    .metric {
+      background: var(--cinza-bg);
+      border: 1px solid var(--cinza-borda);
+      border-radius: var(--radius-sm);
+      padding: 0.9rem 1rem;
+    }
+    .metric.destaque {
+      background: var(--verde-light);
+      border-color: #A8D5BE;
+    }
+    .metric .mlabel {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+      color: var(--cinza-texto);
+      margin-bottom: 5px;
+    }
+    .metric.destaque .mlabel { color: var(--verde); }
+    .metric .mval {
+      font-family: 'Inter', sans-serif;
+      font-size: 20px;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.3px;
+      color: var(--preto);
+      line-height: 1.2;
+    }
+    .metric.destaque .mval { color: var(--verde); }
+    .metric .msub {
+      font-size: 11px;
+      color: var(--cinza-texto);
+      margin-top: 3px;
+    }
+
+    /* BARRAS */
+    .bars-section { margin-bottom: 1.5rem; }
+    .bar-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .bar-label {
+      font-size: 12px;
+      color: var(--cinza-texto);
+      width: 110px;
+      flex-shrink: 0;
+      text-align: right;
+    }
+    .bar-track {
+      flex: 1;
+      background: var(--cinza-borda);
+      border-radius: 4px;
+      height: 20px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+    }
+    .bar-fill.original { background: #E05252; }
+    .bar-fill.nova { background: #B0C4BB; }
+    .bar-fill.economia { background: var(--verde-mid); }
+    .bar-amount {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      min-width: 90px;
+      text-align: right;
+    }
+    .bar-amount.red { color: #A32D2D; }
+    .bar-amount.gray { color: var(--cinza-texto); }
+    .bar-amount.green { color: var(--verde); }
+
+    /* PAYBACK */
+    .payback-box {
+      background: var(--sol-light);
+      border: 1px solid #F5C97A;
+      border-radius: var(--radius-sm);
+      padding: 1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 1.5rem;
+    }
+    .payback-icon {
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+    }
+    .payback-text strong {
+      display: block;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      color: #7A4F00;
+      margin-bottom: 2px;
+    }
+    .payback-text span {
+      font-size: 13px;
+      color: #A06A10;
+    }
+
+    /* CTA */
+    .cta-section {
+      background: var(--azul);
+      padding: 1.75rem 2rem;
+      text-align: center;
+    }
+    .cta-section p {
+      font-size: 14px;
+      color: rgba(255,255,255,0.75);
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--sol);
+      color: #3D2800;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      padding: 13px 28px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .cta-btn:hover { background: #F0981A; transform: translateY(-1px); }
+    .cta-btn:active { transform: scale(0.98); }
+    .cta-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+    /* NOTA */
+    .nota {
+      font-size: 11px;
+      color: var(--cinza-texto);
+      line-height: 1.6;
+      padding: 1rem 2rem;
+      border-top: 1px solid var(--cinza-borda);
+      text-align: center;
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 12px;
+      color: var(--cinza-texto);
+    }
+    footer a { color: var(--verde-mid); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <!-- LOGO: substitua o src abaixo pelo caminho da imagem da SM Solar (ex: src="logo-sm-solar.png") -->
+      <img
+        src="logo-sm-solar.png"
+        alt="SM Solar — Energia Solar e Soluções"
+        class="logo-img"
+        onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='flex';"
+      />
+      <div id="logo-fallback" style="display:none; align-items:center; gap:8px;">
+        <div style="width:36px;height:36px;border-radius:8px;background:rgba(245,166,35,0.15);display:flex;align-items:center;justify-content:center;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="4" fill="#F5A623"/>
+            <line x1="12" y1="2" x2="12" y2="5" stroke="#F5A623" stroke-width="2" stroke-linecap="round"/>
+            <line x1="12" y1="19" x2="12" y2="22" stroke="#F5A623" stroke-width="2" stroke-linecap="round"/>
+            <line x1="2" y1="12" x2="5" y2="12" stroke="#F5A623" stroke-width="2" stroke-linecap="round"/>
+            <line x1="19" y1="12" x2="22" y2="12" stroke="#F5A623" stroke-width="2" stroke-linecap="round"/>
+            <line x1="4.93" y1="4.93" x2="7.05" y2="7.05" stroke="#F5A623" stroke-width="2" stroke-linecap="round"/>
+            <line x1="16.95" y1="16.95" x2="19.07" y2="19.07" stroke="#F5A623" stroke-width="2" stroke-linecap="round"/>
+            <line x1="19.07" y1="4.93" x2="16.95" y2="7.05" stroke="#F5A623" stroke-width="2" stroke-linecap="round"/>
+            <line x1="7.05" y1="16.95" x2="4.93" y2="19.07" stroke="#F5A623" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="logo-text">
+          <strong>SM Solar</strong>
+          <span>Energia Solar e Soluções</span>
+        </div>
+      </div>
+    </div>
+    <span class="header-badge">Simulação gratuita</span>
+  </div>
+</header>
+
+<div class="hero">
+  <span class="hero-eyebrow">Calculadora de economia</span>
+  <h1>Quanto você pode <em>economizar</em> na conta de luz?</h1>
+  <p>Informe o valor da sua conta e sua cidade. A simulação mostra a economia estimada com energia solar fotovoltaica.</p>
+</div>
+
+<div class="card-wrap">
+  <div class="card">
+    <div class="card-body">
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="conta">Valor da conta de luz</label>
+          <div class="input-wrap has-prefix">
+            <span class="input-prefix">R$</span>
+            <input type="number" id="conta" value="1000" min="50" max="99999" step="10" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="regiao">Município</label>
+          <div class="input-wrap">
+            <select id="regiao">
+              <option value="sjb">São João da Barra, RJ</option>
+              <option value="campos">Campos dos Goytacazes, RJ</option>
+              <option value="rjo">Rio das Ostras, RJ</option>
+              <option value="macae">Macaé, RJ</option>
+              <option value="capital">Rio de Janeiro (capital), RJ</option>
+              <option value="sp">São Paulo, SP</option>
+              <option value="bh">Belo Horizonte, MG</option>
+              <option value="rec">Recife, PE</option>
+              <option value="for">Fortaleza, CE</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group full">
+          <label for="reducao">Redução estimada da conta</label>
+          <div class="slider-wrap">
+            <input type="range" id="reducao" min="50" max="90" value="85" step="1" />
+            <span class="slider-val" id="reducao-out">85%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <p class="metrics-title">Resultado da simulação</p>
+
+      <div class="metrics-grid" id="metrics-grid"></div>
+
+      <div class="bars-section" id="bars-section"></div>
+
+      <div class="payback-box" id="payback-box"></div>
+
+    </div>
+
+    <div class="cta-section">
+      <p>Quer uma proposta personalizada com visita técnica gratuita?<br>Nossa equipe dimensiona o sistema ideal para o seu consumo.</p>
+      <a class="cta-btn" id="cta-link" href="#" target="_blank">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.117 1.528 5.845L.057 23.27a1 1 0 001.217 1.217l5.427-1.471A11.943 11.943 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a9.956 9.956 0 01-5.073-1.384l-.363-.215-3.764 1.021 1.021-3.764-.215-.363A9.956 9.956 0 012 12C2 6.477 6.477 2 12 2s10 5.477 10 10-4.477 10-10 10z"/></svg>
+        Falar com consultor no WhatsApp
+      </a>
+    </div>
+
+    <p class="nota" id="nota-rodape"></p>
+  </div>
+</div>
+
+<footer>
+  &copy; <span id="ano"></span> SM Energia Solar e Soluções — Desenvolvido por <a href="#">NS Agência Digital</a>
+</footer>
+
+<script>
+  document.getElementById('ano').textContent = new Date().getFullYear();
+
+  const WHATSAPP = '5522999999999'; // ← substitua pelo número da SM Solar
+
+  const regioes = {
+    sjb:     { label: 'São João da Barra, RJ',        hsp: 5.3 },
+    campos:  { label: 'Campos dos Goytacazes, RJ',    hsp: 5.2 },
+    rjo:     { label: 'Rio das Ostras, RJ',           hsp: 5.1 },
+    macae:   { label: 'Macaé, RJ',                    hsp: 5.1 },
+    capital: { label: 'Rio de Janeiro (capital), RJ', hsp: 4.9 },
+    sp:      { label: 'São Paulo, SP',                hsp: 4.6 },
+    bh:      { label: 'Belo Horizonte, MG',           hsp: 5.1 },
+    rec:     { label: 'Recife, PE',                   hsp: 5.5 },
+    for:     { label: 'Fortaleza, CE',                hsp: 5.9 },
+  };
+
+  const TARIFA = 0.85;
+  const CUSTO_KWP = 4800;
+
+  function fmt(n) { return n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  function fmtInt(n) { return Math.round(n).toLocaleString('pt-BR'); }
+
+  function calc() {
+    const conta = parseFloat(document.getElementById('conta').value) || 1000;
+    const key = document.getElementById('regiao').value;
+    const red = parseInt(document.getElementById('reducao').value);
+    const reg = regioes[key];
+
+    document.getElementById('reducao-out').textContent = red + '%';
+
+    const econMensal    = conta * (red / 100);
+    const novaContaMes  = conta - econMensal;
+    const econAnual     = econMensal * 12;
+    const kwh           = conta / TARIFA;
+    const kwhGerado     = kwh * (red / 100);
+    const kwp           = kwhGerado / (reg.hsp * 30);
+    const custoSistema  = kwp * CUSTO_KWP;
+    const payback       = custoSistema / econAnual;
+    const econ10anos    = econAnual * 10;
+
+    // Métricas
+    document.getElementById('metrics-grid').innerHTML = `
+      <div class="metric destaque">
+        <div class="mlabel">Economia mensal</div>
+        <div class="mval">R$ ${fmt(econMensal)}</div>
+        <div class="msub">${red}% da conta atual</div>
+      </div>
+      <div class="metric destaque">
+        <div class="mlabel">Economia anual</div>
+        <div class="mval">R$ ${fmtInt(econAnual)}</div>
+        <div class="msub">sem considerar reajustes</div>
+      </div>
+      <div class="metric">
+        <div class="mlabel">Nova conta mensal</div>
+        <div class="mval">R$ ${fmt(novaContaMes)}</div>
+        <div class="msub">tarifa mín. + encargos</div>
+      </div>
+      <div class="metric">
+        <div class="mlabel">Potência estimada</div>
+        <div class="mval">${kwp.toFixed(1)} kWp</div>
+        <div class="msub">HSP ${reg.hsp} h/dia</div>
+      </div>
+      <div class="metric">
+        <div class="mlabel">Investimento estimado</div>
+        <div class="mval">R$ ${fmtInt(custoSistema)}</div>
+        <div class="msub">~R$ ${fmtInt(CUSTO_KWP)}/kWp instalado</div>
+      </div>
+      <div class="metric">
+        <div class="mlabel">Economia em 10 anos</div>
+        <div class="mval">R$ ${fmtInt(econ10anos)}</div>
+        <div class="msub">sem reajuste tarifário</div>
+      </div>
+    `;
+
+    // Barras
+    const econPct = Math.round(red);
+    const novaPct = 100 - econPct;
+    document.getElementById('bars-section').innerHTML = `
+      <div class="bar-row">
+        <span class="bar-label">Conta atual</span>
+        <div class="bar-track"><div class="bar-fill original" style="width:100%"></div></div>
+        <span class="bar-amount red">R$ ${fmt(conta)}</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">Nova conta</span>
+        <div class="bar-track"><div class="bar-fill nova" style="width:${novaPct}%"></div></div>
+        <span class="bar-amount gray">R$ ${fmt(novaContaMes)}</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">Você economiza</span>
+        <div class="bar-track"><div class="bar-fill economia" style="width:${econPct}%"></div></div>
+        <span class="bar-amount green">R$ ${fmt(econMensal)}/mês</span>
+      </div>
+    `;
+
+    // Payback
+    document.getElementById('payback-box').innerHTML = `
+      <svg class="payback-icon" viewBox="0 0 40 40" fill="none">
+        <circle cx="20" cy="20" r="19" stroke="#F5A623" stroke-width="1.5"/>
+        <path d="M20 10v10l6 4" stroke="#C27D0E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div class="payback-text">
+        <strong>Retorno do investimento em ~${payback.toFixed(1)} anos</strong>
+        <span>Sistema com vida útil de 25+ anos — a maior parte do tempo gerando economia pura.</span>
+      </div>
+    `;
+
+    // Link WhatsApp
+    const msg = encodeURIComponent(
+      `Olá! Fiz a simulação no site e tenho interesse em uma proposta.\n\n` +
+      `📍 Cidade: ${reg.label}\n` +
+      `💡 Conta atual: R$ ${fmt(conta)}/mês\n` +
+      `☀️ Potência estimada: ${kwp.toFixed(1)} kWp\n` +
+      `💰 Economia estimada: R$ ${fmt(econMensal)}/mês\n\n` +
+      `Gostaria de agendar uma visita técnica.`
+    );
+    document.getElementById('cta-link').href = `https://api.whatsapp.com/send?phone=${WHATSAPP}&text=${msg}`;
+
+    // Nota rodapé
+    document.getElementById('nota-rodape').textContent =
+      `Simulação baseada na irradiação solar de ${reg.hsp} h/dia para ${reg.label} (CRESESB/INMET), ` +
+      `tarifa de referência R$ ${TARIFA}/kWh (ANEEL — distribuidora Norte Fluminense) e custo médio de instalação ` +
+      `de R$ ${fmtInt(CUSTO_KWP)}/kWp. Valores estimados. Uma proposta técnica formal considera consumo real, ` +
+      `estrutura do imóvel e condições de financiamento.`;
+  }
+
+  document.getElementById('conta').addEventListener('input', calc);
+  document.getElementById('regiao').addEventListener('change', calc);
+  document.getElementById('reducao').addEventListener('input', calc);
+  calc();
+</script>
+</body>
+</html>
